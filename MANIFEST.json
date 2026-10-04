@@ -1,20 +1,25 @@
 {
   "product": "English with Filipe",
-  "version": "V6",
-  "tests_per_level": 510,
-  "levels": {
-    "A1": 510,
-    "A2": 510,
-    "B1": 510,
-    "B2": 510,
-    "C1": 510
-  },
-  "total_tests": 2550,
-  "questions_per_test": 10,
-  "total_questions": 25500,
-  "choices_per_question": 5,
+  "version": "V7 repaired runtime",
+  "status": "partial_runtime",
+  "frontend": "web/index.html + web/app.js + web/styles.css",
+  "server": "start_server.py",
+  "database": "SQLite created locally on first run; local *.db files are gitignored",
+  "levels": ["A1","A2","B1","B2","C1"],
   "vocab_unique": 978,
-  "explanations": 23,
-  "trilingual_entries": 245,
-  "test_design": "Original AI-generated content using Cambridge-inspired task types; not official Cambridge material."
+  "vocab_by_level": {
+    "A1": 221,
+    "A2": 189,
+    "B1": 181,
+    "B2": 165,
+    "C1": 222
+  },
+  "quizzes_present": 0,
+  "questions_present": 0,
+  "explanations_present": 0,
+  "trilingual_entries_present": 0,
+  "audio_present": false,
+  "story_image_present": false,
+  "legacy_scripts_archived": true,
+  "note": "The repaired runtime is load-safe with optional datasets missing. Populate the missing quiz, explanation, trilingual, audio and story assets before calling the platform feature-complete."
 }
