@@ -1,46 +1,17 @@
-# English with Filipe — Repository Repair
+# English with Filipe — start here
 
-## Current repository status
+Canonical runtime: `web/index.html`.
 
-The original repository mixes several generations of the frontend (`app.js`, `script0.js`, `script1.js`, `script2.js`, `test.js`) and references a `web/` directory that is not present on `main`.
+Run `python start_server.py` and open `http://localhost:8000`.
 
-The HTTP server in `start_server.py` expects these runtime files:
-- `web/index.html`
-- `web/vocab.json`
-- `web/quizzes.json`
-- `web/explanations.json`
-- `web/trilingual.json`
-- `web/assets/*`
-- `web/audio/*`
+Set teacher credentials through environment variables before using Teacher Lab:
 
-Those runtime assets are missing from the current `main` tree.
+- `EWF_TEACHER_EMAIL`
+- `EWF_TEACHER_PASSWORD`
 
-## Repair branch
+Optional demo student credentials:
 
-This branch is the cleanup target. Do not use the old script fragments as frontend entry points.
+- `EWF_DEMO_EMAIL`
+- `EWF_DEMO_PASSWORD`
 
-Canonical runtime structure:
-- `web/index.html`
-- `web/app.js`
-- `web/data/vocab.json`
-- `web/data/quizzes.json`
-- `web/data/explanations.json`
-- `web/data/trilingual.json`
-- `web/assets/`
-- `web/audio/`
-
-## Data-quality warning
-
-The supplied vocabulary data contains malformed generated example sentences in places. Some examples insert bare nouns or numbers where a verb or complete expression is required. These entries need validation before classroom use.
-
-## Security
-
-Never commit real teacher passwords or other secrets. The current server seeds fixed demo credentials in source code; replace this with environment variables or a first-run setup before public deployment.
-
-## Run locally
-
-```bash
-python start_server.py
-```
-
-Then open `http://localhost:8000`.
+Do not commit passwords or local `.db` files.
