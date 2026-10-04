@@ -25,8 +25,14 @@ def db():
 c=db()
 def seed(email,name,pw,role):
     if not c.execute('select id from users where email=?',(email,)).fetchone(): c.execute('insert into users(name,email,password,role) values(?,?,?,?)',(name,email,hashpw(pw),role)); c.commit()
-seed('teacher@englishwithfilipe.com','Filipe','Filipe2026!','teacher')
-seed('student@englishwithfilipe.com','Demo Student','English123!','student')
+TEACHER_EMAIL=os.getenv('EWF_TEACHER_EMAIL','').strip().lower()
+TEACHER_PASSWORD=os.getenv('EWF_TEACHER_PASSWORD','')
+DEMO_EMAIL=os.getenv('EWF_DEMO_EMAIL','').strip().lower()
+DEMO_PASSWORD=os.getenv('EWF_DEMO_PASSWORD','')
+if TEACHER_EMAIL and TEACHER_PASSWORD:
+    seed(TEACHER_EMAIL,'Filipe',TEACHER_PASSWORD,'teacher')
+if DEMO_EMAIL and DEMO_PASSWORD:
+    seed(DEMO_EMAIL,'Demo Student',DEMO_PASSWORD,'student')
 
 def recs(errors):
     mapping={'meaning':'Review meaning in context and contrast near-synonyms.','vocabulary':'Build a small active vocabulary set and use each word in two original sentences.','usage':'Practice the language in different sentence patterns and communicative situations.','precision':'Compare related words and choose based on context and register.','grammar':'Revisit the grammar point, model the structure, then make the student produce it in three new contexts.'}
@@ -38,8 +44,19 @@ def recs(errors):
 class Handler(SimpleHTTPRequestHandler):
     def translate_path(self,path):
         if path.startswith('/api/'): return ''
-        p=path.split('?',1)[0]
-        return str((WEB/p.lstrip('/')).resolve()) if (WEB/p.lstrip('/')).exists() else str(WEB/'index.html')
+        p=urlparse(path).path
+        target=(WEB/p.lstrip('/')).resolve()
+        web_root=WEB.resolve()
+        try:
+            target.relative_to(web_root)
+        except ValueError:
+            return str(WEB/'__missing__')
+        if target.exists() and target.is_file():
+            return str(target)
+        # SPA fallback only for extensionless routes; missing assets return 404.
+        if Path(p).suffix:
+            return str(WEB/'__missing__')
+        return str(WEB/'index.html')
     def json(self,code,obj):
         raw=json.dumps(obj,ensure_ascii=False).encode(); self.send_response(code); self.send_header('Content-Type','application/json; charset=utf-8'); self.send_header('Content-Length',str(len(raw))); self.send_header('Cache-Control','no-store, no-cache, must-revalidate'); self.end_headers(); self.wfile.write(raw)
     def end_headers(self):
