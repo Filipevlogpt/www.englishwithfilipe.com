@@ -14,8 +14,6 @@ Run:
 python start_server.py
 ```
 
-Then open `http://localhost:8000`.
-
 ## What was fixed
 
 - Added the missing `web/` runtime structure.
